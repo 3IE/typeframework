@@ -1,11 +1,12 @@
 {
-  "name": "typeframework",
+  "name": "typefx",
   "version": "0.3.0",
-  "description": "TypeFramework",
+  "description": "TypeFx",
   "author": "arnaud lemettre <arnaud.lemettre@gmail.com>",
   "license": "MIT",
   "keywords": [
     "typeframework",
+    "typefx",
     "framework",
     "mvc",
     "rest",

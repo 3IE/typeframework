@@ -37,4 +37,5 @@ TypeFramework is actively built and maintained by [3IE](https://github.com/3ie)
 
 **MIT License**
 
+Copyright © 2012-2014 Le Vu (Zeke Kievel)
 Copyright © 2015 3IE

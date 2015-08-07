@@ -1,3 +1,9 @@
+## 0.3.0 (2015-08-07)
+
+Breaking Changes: :
+
+- Update to typescript 1.5
+
 ## 0.2.1 (2014-08-23)
 
 Bug Fixes:
