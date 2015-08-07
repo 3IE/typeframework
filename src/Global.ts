@@ -1,6 +1,6 @@
 /// <reference path="TypeFramework.ts" />
 
-var _ = <LoDash.LoDashStatic> require('lodash');
+var _ = <_.LoDashStatic> require('lodash');
 var fs = <NodeJS.FS.FSStatic> require('fs');
 var path = <NodeJS.Path> require('path');
 var deprecate: (message: string) => void = require('depd')('typeframework');

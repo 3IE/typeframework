@@ -1,8 +1,8 @@
 {
   "name": "typeframework",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "TypeFramework",
-  "author": "Zeke Kievel <zeke.levu@gmail.com>",
+  "author": "arnaud lemettre <arnaud.lemettre@gmail.com>",
   "license": "MIT",
   "keywords": [
     "typeframework",
@@ -12,7 +12,8 @@
     "restful",
     "router",
     "app",
-    "api"
+    "api",
+    "express"
   ],
   "main": "./build/TypeFramework.js",
   "scripts": {
@@ -23,35 +24,36 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/zekelevu/typeframework.git"
+    "url": "https://github.com/3IE/typeframework.git"
   },
   "bugs": {
-    "url": "https://github.com/zekelevu/typeframework/issues"
+    "url": "https://github.com/3IE/typeframework/issues"
   },
   "dependencies": {
-    "express": "4.6.1",
-    "waterline": "0.9.16",
-    "compression": "~1.0.2",
     "body-parser": "~1.2.0",
+    "commander": "~2.2.0",
+    "compression": "~1.0.2",
+    "depd": "~0.4.3",
+    "ejs": "~1.0.0",
+    "express": "4.6.1",
+    "express-ejs-layouts": "~1.1.0",
+    "jison": "~0.4.13",
+    "lodash": "^3.10.1",
     "method-override": "~1.0.1",
     "morgan": "~1.0.1",
-    "lodash": "~2.4.1",
-    "ejs": "~1.0.0",
-    "express-ejs-layouts": "~1.1.0",
-    "commander": "~2.2.0",
-    "jison": "~0.4.13",
-    "depd": "~0.4.3"
+    "waterline": "0.9.16"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-ts": "~1.11.2",
-    "grunt-file-append": "~0.0.4",
+    "grunt-ts": "^4.2.0",
+    "grunt-file-append": "^0.0.6",
     "grunt-text-replace": "~0.3.11",
     "time-grunt": "~0.1.1",
     "load-grunt-tasks": "~0.2.0",
     "sails-disk": "~0.9.3",
     "should": "~4.0.4",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "mocha": "^2.2.5"
   },
   "engines": {
     "node": ">= 0.10.0"

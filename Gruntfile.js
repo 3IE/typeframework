@@ -37,26 +37,29 @@ module.exports = function (grunt) {
         },
         file_append: {
             tf: {
-                files: {
-                    'build/TypeFramework.js': {
-                        append: "\nmodule.exports = TF;"
-                    }
-                }
+                files: [{
+                    input: 'build/TypeFramework.js',
+                    append: "\nmodule.exports = TF;"
+
+                }]
             },
             test: {
-                files: {
-                    'test/integration/.build/app.js': {
-                        prepend: "var TF = require('../../../build/TypeFramework.js');\n\n",
-                        append: "\nmodule.exports = app;"
-                    }
-                }
+                files: [{
+                    input: 'test/integration/.build/app.js',
+                    prepend: "var TF = require('../../../build/TypeFramework.js');\n\n",
+                    append: "\nmodule.exports = app;"
+
+                }]
             }
         }
     });
 
-    grunt.registerTask('build_framework', [ 'ts:build', 'file_append:tf' ]);
-    grunt.registerTask('build_test', [ 'ts:build_test', 'file_append:test' ]);
+    grunt.loadNpmTasks('grunt-file-append');
+    grunt.loadNpmTasks("grunt-ts");
 
-    grunt.registerTask('default', [ 'build_framework' ]);
-    grunt.registerTask('test', [ 'build_framework', 'build_test' ]);
+    grunt.registerTask('build_framework', ['ts:build', 'file_append:tf']);
+    grunt.registerTask('build_test', ['ts:build_test', 'file_append:test']);
+
+    grunt.registerTask('default', ['build_framework']);
+    grunt.registerTask('test', ['build_framework', 'build_test']);
 };
