@@ -1,6 +1,7 @@
 # Welcome to TypeFramework
 
 TypeFramework is a MVC Web Framework that makes it easy to build enterprise-grade [NodeJS](http://nodejs.org) apps using [TypeScript](http://www.typescriptlang.org) with [Express](http://expressjs.com/).
+Visit the project sample [typefx-sample](https://github.com/3IE/typefx-sample) to see how the TypeFx works. 
 
 ## Prerequisites
 
@@ -38,4 +39,5 @@ TypeFramework is actively built and maintained by [3IE](https://github.com/3ie)
 **MIT License**
 
 Copyright © 2012-2014 Le Vu (Zeke Kievel)
+
 Copyright © 2015 3IE
