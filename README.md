@@ -2,6 +2,8 @@
 
 TypeFramework is a MVC Web Framework that makes it easy to build enterprise-grade [NodeJS](http://nodejs.org) apps using [TypeScript](http://www.typescriptlang.org) with [Express](http://expressjs.com/).
 
+[![npm version](https://badge.fury.io/js/typefx.svg)](http://badge.fury.io/js/typefx)
+
 ## Prerequisites
 
 In order to test the framework, install mocha

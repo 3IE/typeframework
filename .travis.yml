@@ -1,14 +1,13 @@
 language: node_js
 
 node_js:
-    - "0.10"
+    - "0.12"
 
 # whitelisted branches
 branches:
     only:
         - master
-        - stable
-        - beta
+        - develop
 
 before_install:
     - npm install -g grunt-cli
