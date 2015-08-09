@@ -13,6 +13,16 @@ class HomeController extends TF.Controller {
         else context.next();
     }
 
+    @TF.Decorators.HttpGet
+    restrictGetFunction() {
+        this.content('home');
+    }
+
+    @TF.Decorators.HttpPost
+    restrictPostFunction() {
+        this.json({ name: 'arnaud' });
+    }
+
     index() {
         this.content('home');
     }
@@ -102,6 +112,6 @@ class HomeController extends TF.Controller {
         this.content('private');
     }
 
-    static staticFunction() {}
+    static staticFunction() { }
 
 }

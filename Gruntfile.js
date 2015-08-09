@@ -18,7 +18,8 @@ module.exports = function (grunt) {
                     declaration: true,
                     removeComments: true,
                     htmlModuleTemplate: '<%= filename %>',
-                    htmlVarTemplate: '<%= ext %>'
+                    htmlVarTemplate: '<%= ext %>',
+                    additionalFlags:'--experimentalDecorators --emitDecoratorMetadata'
                 }
             },
             build_test: {
@@ -31,7 +32,8 @@ module.exports = function (grunt) {
                     declaration: true,
                     removeComments: true,
                     htmlModuleTemplate: '<%= filename %>',
-                    htmlVarTemplate: '<%= ext %>'
+                    htmlVarTemplate: '<%= ext %>',
+                    additionalFlags:'--experimentalDecorators --emitDecoratorMetadata'
                 }
             }
         },
