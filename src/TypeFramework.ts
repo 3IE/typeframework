@@ -13,3 +13,4 @@
 /// <reference path="Controller.ts" />
 /// <reference path="Router.ts" />
 /// <reference path="Application.ts" />
+/// <reference path="Decorators.ts"/>

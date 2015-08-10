@@ -3,13 +3,13 @@ var should = require('should');
 var request = require('request');
 var _ = require('lodash');
 
-describe('Test App', function() {
+describe('Test App', function () {
     var app = null;
     var root = 'http://localhost:3000';
 
-    var testBody = function(url, expectedBody, status) {
+    var testBody = function (url, expectedBody, status) {
         status = !!status ? status : 200;
-        it('should return "' + expectedBody + '" for ' + url, function(done) {
+        it('should return "' + expectedBody + '" for ' + url, function (done) {
             request(url, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(status);
@@ -19,9 +19,9 @@ describe('Test App', function() {
         });
     };
 
-    var testHeader = function(url, headers, status) {
+    var testHeader = function (url, headers, status) {
         status = !!status ? status : 200;
-        it('should contain headers ' + JSON.stringify(headers) + ' for ' + url, function(done) {
+        it('should contain headers ' + JSON.stringify(headers) + ' for ' + url, function (done) {
             request({ url: url, followRedirect: false }, function (error, response) {
                 should.not.exist(error);
                 response.statusCode.should.equal(status);
@@ -31,8 +31,8 @@ describe('Test App', function() {
         });
     };
 
-    var testStatus = function(url, status) {
-        it('should return ' + status + ' for ' + url, function(done) {
+    var testStatus = function (url, status) {
+        it('should return ' + status + ' for ' + url, function (done) {
             request(url, function (error, response) {
                 should.not.exist(error);
                 response.statusCode.should.equal(status);
@@ -41,11 +41,27 @@ describe('Test App', function() {
         });
     };
 
-    var testFilter = function(action, filter, shouldStopAtFilter) {
+
+    var testRestrictVerbsAnnotation = function (url, status, verb) {
+        
+        it('should return ' + status + ' for ' + url, function (done) {
+            request({ url: root + url, method: verb, json: true }, function (error, response, body) {
+                should.not.exist(error);
+               /* console.log("response.statusCode => " + response.statusCode);
+                console.log("response.status => " + status);*/
+                response.statusCode.should.equal(status);
+                done();
+            })
+        });
+    }
+
+
+
+    var testFilter = function (action, filter, shouldStopAtFilter) {
         var url = root + '/home/' + action;
         var expectedBody = shouldStopAtFilter ? filter : action;
         var filterQuery = shouldStopAtFilter ? filter : '';
-        it('should return "' + expectedBody + '" for action ' + action, function(done) {
+        it('should return "' + expectedBody + '" for action ' + action, function (done) {
             request({ url: url, qs: { filter: filterQuery } }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -55,14 +71,14 @@ describe('Test App', function() {
         });
     };
 
-    before(function(done) {
+    before(function (done) {
         var databasePath = __dirname + '/.build/database.json';
         fs.existsSync(databasePath) && fs.unlinkSync(databasePath);
         app = require('./.build/app.js');
         done();
     });
 
-    describe('HomeController', function() {
+    describe('HomeController', function () {
         testBody(root, 'home');
         testBody(root + '/home/viewWithLayout', 'viewWithLayout');
         testBody(root + '/home/viewWithoutLayout', 'viewWithoutLayout');
@@ -106,19 +122,45 @@ describe('Test App', function() {
         testFilter('actionWithAllBeforeFilters', 'filter1', true);
         testFilter('actionWithAllBeforeFilters', 'filter2', true);
         testFilter('actionWithAllBeforeFilters', 'filter3', true);
+
+        testRestrictVerbsAnnotation('/home/restrictGetFunction', 200, 'GET');
+        testRestrictVerbsAnnotation('/home/restrictGetFunction', 404, 'POST');
+        testRestrictVerbsAnnotation('/home/restrictGetFunction', 404, 'PATCH');
+        testRestrictVerbsAnnotation('/home/restrictGetFunction', 404, 'PUT');
+        testRestrictVerbsAnnotation('/home/restrictGetFunction', 404, 'DELETE');
+
+
+        testRestrictVerbsAnnotation('/home/restrictPostFunction', 200, 'POST');
+        testRestrictVerbsAnnotation('/home/restrictPostFunction', 404, 'GET');
+        testRestrictVerbsAnnotation('/home/restrictPostFunction', 404, 'PATCH');
+        testRestrictVerbsAnnotation('/home/restrictPostFunction', 404, 'PUT');
+        testRestrictVerbsAnnotation('/home/restrictPostFunction', 404, 'DELETE');
+
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 404, 'POST');
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 404, 'GET');
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 404, 'PATCH');
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 200, 'PUT');
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 404, 'DELETE');
+
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 404, 'POST');
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 404, 'GET');
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 404, 'PATCH');
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 404, 'PUT');
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 200, 'DELETE');
+
     });
 
-    describe('UserController', function() {
-        it('should not allow models to share waterline collection attributes', function(done) {
-            var User = _.find(app.models, function(model) { return model.name == 'User' }).type;
-            var User2 = _.find(app.models, function(model) { return model.name == 'User2' }).type;
+    describe('UserController', function () {
+        it('should not allow models to share waterline collection attributes', function (done) {
+            var User = _.find(app.models, function (model) { return model.name == 'User' }).type;
+            var User2 = _.find(app.models, function (model) { return model.name == 'User2' }).type;
             _.toArray(User.attributes).length.should.equal(3);
             User.attributes.should.have.keys('name', 'email', 'age');
             should.not.exist(User2.attributes);
             done();
         });
 
-        it('should return empty array when retrieving all users', function(done) {
+        it('should return empty array when retrieving all users', function (done) {
             request({ url: root + '/user/', json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -128,33 +170,33 @@ describe('Test App', function() {
             })
         });
 
-        it('should return 404 when retrieving non-existing user', function() {
+        it('should return 404 when retrieving non-existing user', function () {
             request({ url: root + '/user/1', method: 'GET', json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(404);
-                body.should.containEql({ error: 'not found'});
+                body.should.containEql({ error: 'not found' });
             })
         });
 
-        it('should return 404 when updating non-existing user', function(done) {
+        it('should return 404 when updating non-existing user', function (done) {
             request({ url: root + '/user/1', method: 'PUT', json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(404);
-                body.should.containEql({ error: 'not found'});
+                body.should.containEql({ error: 'not found' });
                 done();
             })
         });
 
-        it('should return 404 when deleting non-existing user', function(done) {
+        it('should return 404 when deleting non-existing user', function (done) {
             request({ url: root + '/user/1', method: 'DELETE', json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(404);
-                body.should.containEql({ error: 'not found'});
+                body.should.containEql({ error: 'not found' });
                 done();
             })
         });
 
-        it('should return error when creating new user without email', function(done) {
+        it('should return error when creating new user without email', function (done) {
             request({ url: root + '/user', method: 'POST', json: true, form: { name: 'Test' } }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -165,7 +207,7 @@ describe('Test App', function() {
         });
 
         var user1 = { name: 'User1', email: 'user1@test.com' };
-        it('should return new user when creating new user (User1)', function(done) {
+        it('should return new user when creating new user (User1)', function (done) {
             request({ url: root + '/user', method: 'POST', json: true, form: user1 }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -177,7 +219,7 @@ describe('Test App', function() {
         });
 
         var user2 = { name: 'User2', email: 'user2@test.com' };
-        it('should return new user when creating new user (User2)', function(done) {
+        it('should return new user when creating new user (User2)', function (done) {
             request({ url: root + '/user', method: 'POST', json: true, form: user2 }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -188,7 +230,7 @@ describe('Test App', function() {
             })
         });
 
-        it('should return 2 users when retrieving all users', function(done) {
+        it('should return 2 users when retrieving all users', function (done) {
             request({ url: root + '/user/', json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -198,7 +240,7 @@ describe('Test App', function() {
             })
         });
 
-        it('should return 1 user when searching for user2 email', function(done) {
+        it('should return 1 user when searching for user2 email', function (done) {
             request({ url: root + '/user/', qs: { email: user2.email }, json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -212,7 +254,7 @@ describe('Test App', function() {
         });
 
         user1.email = 'user1-new@test.com';
-        it('should return new user data when updating user1 email', function(done) {
+        it('should return new user data when updating user1 email', function (done) {
             request({ url: root + '/user/1', qs: { email: user1.email }, method: 'PUT', json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -223,7 +265,7 @@ describe('Test App', function() {
             })
         });
 
-        it('should return new user data when retrieving user1', function(done) {
+        it('should return new user data when retrieving user1', function (done) {
             request({ url: root + '/user/1', json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -234,7 +276,7 @@ describe('Test App', function() {
             })
         });
 
-        it('should return ok when deleting user1', function(done) {
+        it('should return ok when deleting user1', function (done) {
             request({ url: root + '/user/1', method: 'DELETE', json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
@@ -243,7 +285,7 @@ describe('Test App', function() {
             })
         });
 
-        it('should return user2 when retrieving all users', function(done) {
+        it('should return user2 when retrieving all users', function (done) {
             request({ url: root + '/user/', json: true }, function (error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
