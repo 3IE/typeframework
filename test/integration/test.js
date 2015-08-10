@@ -43,10 +43,14 @@ describe('Test App', function () {
 
 
     var testRestrictVerbsAnnotation = function (url, status, verb) {
-        it('should return ' + status + ' for ' + url, function () {
+        
+        it('should return ' + status + ' for ' + url, function (done) {
             request({ url: root + url, method: verb, json: true }, function (error, response, body) {
                 should.not.exist(error);
+               /* console.log("response.statusCode => " + response.statusCode);
+                console.log("response.status => " + status);*/
                 response.statusCode.should.equal(status);
+                done();
             })
         });
     }
@@ -121,8 +125,29 @@ describe('Test App', function () {
 
         testRestrictVerbsAnnotation('/home/restrictGetFunction', 200, 'GET');
         testRestrictVerbsAnnotation('/home/restrictGetFunction', 404, 'POST');
+        testRestrictVerbsAnnotation('/home/restrictGetFunction', 404, 'PATCH');
+        testRestrictVerbsAnnotation('/home/restrictGetFunction', 404, 'PUT');
+        testRestrictVerbsAnnotation('/home/restrictGetFunction', 404, 'DELETE');
+
+
         testRestrictVerbsAnnotation('/home/restrictPostFunction', 200, 'POST');
         testRestrictVerbsAnnotation('/home/restrictPostFunction', 404, 'GET');
+        testRestrictVerbsAnnotation('/home/restrictPostFunction', 404, 'PATCH');
+        testRestrictVerbsAnnotation('/home/restrictPostFunction', 404, 'PUT');
+        testRestrictVerbsAnnotation('/home/restrictPostFunction', 404, 'DELETE');
+
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 404, 'POST');
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 404, 'GET');
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 404, 'PATCH');
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 200, 'PUT');
+        testRestrictVerbsAnnotation('/home/restrictPutFunction', 404, 'DELETE');
+
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 404, 'POST');
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 404, 'GET');
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 404, 'PATCH');
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 404, 'PUT');
+        testRestrictVerbsAnnotation('/home/restrictDeleteFunction', 200, 'DELETE');
+
     });
 
     describe('UserController', function () {

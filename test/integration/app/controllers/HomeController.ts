@@ -23,6 +23,16 @@ class HomeController extends TF.Controller {
         this.json({ name: 'arnaud' });
     }
 
+    @TF.Decorators.HttpPut
+    restrictPutFunction() {
+        this.json({ name: 'arnaud' });
+    }
+
+    @TF.Decorators.HttpDelete
+    restrictDeleteFunction() {
+        this.json({ name: 'arnaud' });
+    }
+
     index() {
         this.content('home');
     }
