@@ -6,7 +6,9 @@ module TF {
         router: Router;
         root: string;
 
-        private express: EX.Application;
+        public express: EX.Application;
+         public serverInstance;
+        public clientSocket;
         private declaration: Declaration;
         private models: ModelInfo[] = [];
         private controllers: ControllerInfo[] = [];
@@ -15,6 +17,10 @@ module TF {
             this.root = root;
             this.config = new Configuration(root);
             this.router = new Router();
+             var express = require('express');
+            this.express = express();
+            this.serverInstance = null;
+            this.clientSocket = null;
 
             // default settings
             this.config.set('env', !process.env.NODE_ENV ? 'development' : process.env.NODE_ENV);
@@ -55,13 +61,12 @@ module TF {
             this.buildRoutes();
 
             var port = this.config.get('port');
-            this.express.listen(port);
+            this.serverInstance = this.express.listen(port);
             console.log('Listening on port: ' + port);
         }
 
         private buildExpress() {
-            var express: any = require('express');
-            this.express = express();
+         
             this.express.set('views', path.join(this.root, this.config.get('view.path')));
             this.express.set('view engine', this.config.get('view.engine'));
             this.express.set('layout', this.config.get('view.layout'));
