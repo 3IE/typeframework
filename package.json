@@ -41,6 +41,7 @@
     "lodash": "^3.10.1",
     "method-override": "~1.0.1",
     "morgan": "~1.0.1",
+    "socket.io": "^1.4.4",
     "waterline": "0.9.16"
   },
   "devDependencies": {
